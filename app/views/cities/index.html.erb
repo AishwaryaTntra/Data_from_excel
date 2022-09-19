@@ -1,0 +1,27 @@
+<h1 id = "city">Cities</h1>
+  <table>
+  <thead>
+      <th>Name</th>
+      <th>Edit</th>
+      <th>Delete</th>
+      <th>Locations</th>
+      <th>Add location</th>
+  </thead>
+  <tbody>
+    <% @cities.each do |city| %>
+    <tr>
+      <td><%= city.name %></td>
+      <td><%= link_to "Edit", edit_city_path(city) %></td>
+      <td><%= link_to "Destroy", city_path(city), data: {
+        turbo_method: :delete,
+        turbo_confirm: "Are you sure?"
+      } %></td>
+      <td> <%= link_to 'View Locations', city_locations_path(city) %></td>
+      <td> <%= link_to 'Add new location', new_city_location_path(city) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+ </table><br>
+
+ <button type = "button"><%= link_to "New City", new_city_path %></button>&nbsp;
+ <button type = "button"><%= link_to "Add New Users", data_imports_new_path %></button>
