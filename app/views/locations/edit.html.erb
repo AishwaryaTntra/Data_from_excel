@@ -1,0 +1,17 @@
+<h2>Enter the details to be updated</h2>
+<%= form_with model: [ @city, @location ] do |form| %>
+  <div>
+    <div class = "input-container">
+      <%= form.label :name %>
+      <%= form.text_field :name ,:size=>"50" %></div>
+      <% @location.errors.full_messages_for(:name).each do |message| %>
+      <div class = "error"><%= message %></div>
+      <% end %>
+  </div><br>
+    
+  <div>
+    <%= form.submit 'Edit' %> &nbsp; <button type = "button"><%= link_to "Back", city_locations_path %></button>
+  </div>
+  
+  
+<% end %>
