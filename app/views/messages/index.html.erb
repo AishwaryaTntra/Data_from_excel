@@ -1,0 +1,22 @@
+<h2 id = "message">Messages </h2>
+  <table>
+  <thead>
+      <th>Title</th>
+      <th>Created at</th>
+      <th>Location</th>
+      <th>City</th>
+  </thead>
+  <tbody>
+  <% @messages.each do |message| %>
+    <tr>
+      <td><%= message.title %></td>
+      <td><%= message.formatted_created_at %></td>
+      <td><%= message.location.name %></td>
+      <td><%= message.location.city.name %></td>
+    </tr>
+    <% end %>
+  </tbody>
+ </table><br>
+ <button type = "button"><%= link_to "Back", locations_path(city_id: @messages.first.location.city.id) %></button>
+
+<button type = "button"><%= link_to "Notify Users", new_location_message_path %></button>
