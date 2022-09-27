@@ -72,5 +72,7 @@ group :test do
 end
 
 gem 'activerecord-import'
+gem 'figaro'
 gem 'pry'
 gem 'roo'
+gem 'twilio-ruby'
