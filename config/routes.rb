@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     resources :locations
   end
   resources :locations do
-    resources :users
+    resources :customers
     resources :messages
   end
 end
