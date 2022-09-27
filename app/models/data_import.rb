@@ -38,7 +38,7 @@ class DataImport
         user << user_attributes
       end
       final_user = user.uniq
-      User.import final_user, validate: true, validate_uniqueness: true
+      Customer.import final_user, validate: true, validate_uniqueness: true
     end
   end
 

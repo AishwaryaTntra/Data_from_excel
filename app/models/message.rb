@@ -1,6 +1,7 @@
 class Message < ApplicationRecord
   belongs_to :location
-  has_many :users, through: :location
+  belongs_to :user
+  has_many :customers, through: :location
   validates :body, :title, presence: true
 
   def formatted_created_at
