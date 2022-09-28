@@ -6,6 +6,8 @@ class DataImport
 
   def initialize(attributes = {})
     attributes.each { |name, value| send("#{name}=", value) }
+    rescue StandardError
+      nil
   end
 
   def persisted?
