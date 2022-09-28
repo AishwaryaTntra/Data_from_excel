@@ -1,0 +1,32 @@
+<h2>Create the message </h2>
+<%= form_with model: [ @location, @location.messages.build ] do |form| %>
+  <div>
+    <div class = "input-container">
+      <%= form.label :title %>
+      <%= form.text_field :title ,:size=>"50"%></div>
+      <% @message.errors.full_messages_for(:title).each do |message| %>
+      <div class = "error"><%= message %></div>
+      <% end %>
+  </div><br>
+  <div>
+    <div class = "input-container">
+      <%= form.label :body %>
+      <%= form.text_field :body  ,:size=>"50"%></div>
+      <% @message.errors.full_messages_for(:body).each do |message| %>
+      <div class = "error"><%= message %></div>
+      <% end %>
+  </div><br>
+
+    
+  <div>
+  <%= form.submit "Create!" %>&nbsp;<button type = "button"> &nbsp;
+  <% if @location.messages.exists? %>
+    <%= link_to "Back", location_messages_path(@location) %></button>
+  <% else %>
+    <%= link_to "Back", city_locations_path(@location.city.id) %></button>
+  <% end %>
+
+  </div>
+  
+  
+<% end %>

@@ -1,0 +1,24 @@
+<h2 id = "user">Customers </h2>
+  <table>
+  <thead>
+      <th>Name</th>
+      <th>Phone Number</th>
+      <th>Email-id</th>
+      <th>Location</th>
+      <th>City</th>
+      <th>Edit</th>
+  </thead>
+  <tbody>
+  <% @customers.each do |customer| %>
+    <tr>
+      <td><%= customer.name %></td>
+      <td><%= customer.phone %></td>
+      <td><%= customer.email %></td>
+      <td><%= customer.location.name %></td>
+      <td><%= customer.city.name %></td>
+      <td><%= link_to 'Edit User', edit_location_customer_path(id: user.id) %> </td>
+    </tr>
+    <% end %>
+  </tbody>
+ </table><br>
+ <button type = "button"><%= link_to "Back", city_locations_path(city_id: @customers.first.location.city.id) %></button>

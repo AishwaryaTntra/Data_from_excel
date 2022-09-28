@@ -1,0 +1,17 @@
+<%= form_with model: @city do |form| %>
+  <div>
+  <div class = "input-container">
+    <%= form.label :name %>
+    <%= form.text_field :name , size: 50 , :maxlength=>"254" %></div>
+    <% @city.errors.full_messages_for(:name).each do |message| %>
+    <div class = "error"><%= message %></div>
+    <% end %>
+  </div><br>
+  
+  <div>
+    <%= form.submit %> &nbsp; <button type = "button"><%= link_to "Back", cities_path %></button>
+  </div>
+
+  
+  
+  <% end %>

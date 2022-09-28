@@ -1,0 +1,24 @@
+<h2 id = "user">Users </h2>
+  <table>
+  <thead>
+      <th>Name</th>
+      <th>Phone Number</th>
+      <th>Email-id</th>
+      <th>Location</th>
+      <th>City</th>
+      <th>Edit</th>
+  </thead>
+  <tbody>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= user.name %></td>
+      <td><%= user.phone %></td>
+      <td><%= user.email %></td>
+      <td><%= user.location.name %></td>
+      <td><%= user.city.name %></td>
+      <td><%= link_to 'Edit User', edit_location_user_path(id: user.id) %> </td>
+    </tr>
+    <% end %>
+  </tbody>
+ </table><br>
+ <button type = "button"><%= link_to "Back", city_locations_path(city_id: @users.first.location.city.id) %></button>
