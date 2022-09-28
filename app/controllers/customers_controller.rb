@@ -1,6 +1,6 @@
 class CustomersController < ApplicationController
   def index
-    location = Location.find_by(id: params[:location_id])
+    @location = Location.find_by(id: params[:location_id])
     @customers = Customer.all.where(location_id: location.id, user_id: current_user.id)
   end
 
@@ -13,7 +13,7 @@ class CustomersController < ApplicationController
     @location = Location.find_by(id: params[:location_id])
     @customer = Customer.find_by(id: params[:id])
 
-    if @customer.update(user_params)
+    if @customer.update(customer_params)
       redirect_to location_customers_path
     else
       render :edit, status: :unprocessable_entity
