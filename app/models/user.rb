@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :cities, dependent: :destroy
   has_many :locations
   has_many :customers
-  validate :no_duplicate_cities
+  validate :no_duplicate_city
   belongs_to :role
   validates :name, :phone, :email, presence: true
   after_initialize :set_default_role
@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   end
 
   def no_duplicate_city
-    self.cities = cities.uniq
+    self.cities = cities.uniq if cities.count.positive?
   end
 
   private
