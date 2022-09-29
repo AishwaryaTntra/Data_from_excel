@@ -6,8 +6,8 @@ class DataImport
 
   def initialize(attributes = {})
     attributes.each { |name, value| send("#{name}=", value) }
-    rescue StandardError
-      nil
+  rescue StandardError
+    nil
   end
 
   def persisted?
@@ -25,22 +25,24 @@ class DataImport
   end
 
   def load_imported_data
+    current_user = Current.user
     spreadsheet = open_spreadsheet
     header = spreadsheet.row(1)
-    city = City.find_or_create_by(name: @city_name)
+    city = City.find_or_create_by(name: @city_name, user_id: current_user.id)
     len = spreadsheet.sheets.length - 1
     (0..len).each do |num|
       @location_name = spreadsheet.sheets[num].titleize
-      location = Location.find_or_create_by(name: @location_name, city_id: city.id)
-      user = []
+      location = Location.find_or_create_by(name: @location_name, city_id: city.id, user_id: current_user.id)
+      customer = []
       (2..spreadsheet.sheet(num).last_row).map do |i|
         row = Hash[[header, spreadsheet.sheet(num).row(i)].transpose]
         row['Phone'] = row['Phone'].to_s.split('.').shift
-        user_attributes = row.to_hash.transform_keys(&:downcase).merge!(location_id: location.id)
-        user << user_attributes
+        customer_attributes = row.to_hash.transform_keys(&:downcase).merge!(location_id: location.id,
+                                                                            user_id: current_user.id)
+        customer << customer_attributes
       end
-      final_user = user.uniq
-      Customer.import final_user, validate: true, validate_uniqueness: true
+      final_customer = customer.uniq
+      Customer.import final_customer, validate: true, validate_uniqueness: true
     end
   end
 
