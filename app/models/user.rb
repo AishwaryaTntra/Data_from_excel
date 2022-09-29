@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :cities, dependent: :destroy
   has_many :locations
   has_many :customers
+  validate :no_duplicate_cities
   belongs_to :role
   validates :name, :phone, :email, presence: true
   after_initialize :set_default_role
@@ -15,6 +16,10 @@ class User < ActiveRecord::Base
     define_method "#{role}?" do
       self.role == Role.find_by(name: role.titleize)
     end
+  end
+
+  def no_duplicate_city
+    self.cities = cities.uniq
   end
 
   private
