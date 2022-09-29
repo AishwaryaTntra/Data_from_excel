@@ -15,8 +15,8 @@
       <td><%= customer.phone %></td>
       <td><%= customer.email %></td>
       <td><%= customer.location.name %></td>
-      <td><%= customer.city.name %></td>
-      <td><%= link_to 'Edit User', edit_location_customer_path(id: user.id) %> </td>
+      <td><%= customer.location.city.name %></td>
+      <td><%= link_to 'Edit User', edit_location_customer_path(id: customer.id) %> </td>
     </tr>
     <% end %>
   </tbody>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Data</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,8 +12,11 @@
 </head>
 
 <body>
-<%= flash[:alert] %>
-<%= flash[:notice] %>
+
+  <%= flash[:alert] %>
+  <%= flash[:notice] %>
   <%= yield %>
+  <%= render 'shared/navbar' %>
 </body>
+
 </html>
