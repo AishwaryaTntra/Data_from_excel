@@ -72,5 +72,7 @@ group :test do
 end
 
 gem 'activerecord-import'
+gem 'cancancan'
+gem 'devise'
 gem 'pry'
 gem 'roo'
