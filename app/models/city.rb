@@ -5,6 +5,6 @@ class City < ApplicationRecord
   validates :name, presence: true
   validate :no_duplicate_location
   def no_duplicate_location
-    self.locations = locations.uniq
+    self.locations = locations.uniq if locations.count.positive?
   end
 end
