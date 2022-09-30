@@ -16,7 +16,7 @@ class MessagesController < ApplicationController
     @location = Location.find_by(id: params[:location_id])
     @message = @location.messages.new(message_params)
     if @message.save
-      MessageMailer.new_message_mail(@message).deliver_now
+      WhatsappMessager.new(@message).find_customers
       redirect_to location_messages_path(@location)
     else
       render :new, status: :unprocessable_entity

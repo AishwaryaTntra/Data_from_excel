@@ -74,5 +74,8 @@ end
 gem 'activerecord-import'
 gem 'cancancan'
 gem 'devise'
+gem 'net-http'
+gem 'openssl'
 gem 'pry'
 gem 'roo'
+gem 'uri'
