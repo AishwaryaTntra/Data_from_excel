@@ -1,0 +1,1 @@
+File for testing if the exception for uploads in formats other than xls, xlsx or csv is handled.
