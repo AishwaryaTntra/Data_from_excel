@@ -13,7 +13,9 @@ class LocationsController < ApplicationController
   def create
     @city = City.find_by(id: params[:city_id], user_id: current_user.id)
     @location = @city.locations.new(location_params)
-    if @location.save
+    @location.assign_attributes(user_id: current_user.id)
+    if @location.valid?
+      @location.save
       redirect_to city_locations_path
     else
       render :new, status: :unprocessable_entity
@@ -37,8 +39,8 @@ class LocationsController < ApplicationController
   end
 
   def destroy
-    @city = City.find_by(id: params[:city_id], user_id: current_user.id)
     @location = Location.find_by(id: params[:id], user_id: current_user.id)
+    @city = City.find_by(id: @location.city_id)
     @location.destroy
 
     redirect_to city_locations_path(city_id: @city.id), status: :see_other

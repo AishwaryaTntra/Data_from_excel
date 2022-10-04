@@ -4,4 +4,5 @@ class Location < ApplicationRecord
   has_many :messages, dependent: :destroy
   belongs_to :user
   validates :name, presence: true
+  validates_uniqueness_of :name, scope: %i[city_id user_id]
 end
