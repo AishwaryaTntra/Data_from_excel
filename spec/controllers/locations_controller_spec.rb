@@ -17,7 +17,22 @@ RSpec.describe LocationsController, type: :controller do
         'city_id': city1.id
       }
       get :index, params: required_params
+      expect(response.status).to eq(200)
+    end
+
+    it 'should return render index template' do
+      required_params = {
+        'city_id': city1.id
+      }
+      get :index, params: required_params
       expect(response).to render_template(:index)
+    end
+
+    it 'should assigns locations value to the list od locations for the city' do
+      required_params = {
+        'city_id': city1.id
+      }
+      get :index, params: required_params
       expect(assigns(:locations)).to eq([location1, location2])
     end
   end
@@ -29,6 +44,12 @@ RSpec.describe LocationsController, type: :controller do
       }
       get :new, params: required_params
       expect(response).to render_template(:new)
+    end
+    it 'should return http success' do
+      required_params = {
+        'city_id': city1.id
+      }
+      get :new, params: required_params
       expect(response.status).to be(200)
     end
   end
@@ -48,7 +69,7 @@ RSpec.describe LocationsController, type: :controller do
       end
     end
     context 'if the city is not saved' do
-      it 'should render new with status unprocessable entity' do
+      it 'should render new template ' do
         required_params = {
           'location': {
             'name': '',
@@ -58,6 +79,17 @@ RSpec.describe LocationsController, type: :controller do
         }
         post :create, params: required_params
         expect(response).to render_template(:new)
+      end
+
+      it 'should respond with unprocessable entity' do
+        required_params = {
+          'location': {
+            'name': '',
+            'user_id': @current_user.id
+          },
+          'city_id': city1.id
+        }
+        post :create, params: required_params
         expect(response.status).to eq(422)
       end
     end
@@ -70,13 +102,20 @@ RSpec.describe LocationsController, type: :controller do
   end
 
   describe 'GET	/cities/:city_id/locations/:id/edit' do
-    it 'should render edit template' do
+    it 'should return http success' do
       required_params = {
         "city_id": city1.id,
         'id': location1.id
       }
       get :edit, params: required_params
       expect(response.status).to eq(200)
+    end
+    it 'should render edit template' do
+      required_params = {
+        "city_id": city1.id,
+        'id': location1.id
+      }
+      get :edit, params: required_params
       expect(response).to render_template(:edit)
     end
 
@@ -95,7 +134,7 @@ RSpec.describe LocationsController, type: :controller do
 
   describe 'PATCH	/cities/:city_id/locations/:id' do
     context 'the location is updated' do
-      it 'should redirect to location index with updated location' do
+      it 'should return http code 302' do
         required_params = {
           "location": {
             "name": 'Test location'
@@ -105,13 +144,45 @@ RSpec.describe LocationsController, type: :controller do
         }
         patch :update, params: required_params
         expect(response.status).to be(302)
+      end
+      it 'should redirect to locations index' do
+        required_params = {
+          "location": {
+            "name": 'Test location'
+          },
+          "id": location1.id,
+          'city_id': city1.id
+        }
+        patch :update, params: required_params
         expect(response).to redirect_to city_locations_path
+      end
+      it 'should update the location' do
+        required_params = {
+          "location": {
+            "name": 'Test location'
+          },
+          "id": location1.id,
+          'city_id': city1.id
+        }
+        patch :update, params: required_params
         expect(assigns(:location)).to eq(location1)
       end
     end
 
     context 'the location is not updated' do
-      it 'should render new with unprocessable entity status' do
+      it 'should render edit template' do
+        required_params = {
+          'location': {
+            'name': ''
+          },
+          'id': location1.id,
+          'city_id': city1.id
+        }
+        patch :update, params: required_params
+        expect(response).to render_template(:edit)
+      end
+
+      it 'should respond with unprocessable entity status' do
         required_params = {
           'location': {
             'name': ''
@@ -121,7 +192,6 @@ RSpec.describe LocationsController, type: :controller do
         }
         patch :update, params: required_params
         expect(response.status).to be(422)
-        expect(response).to render_template(:edit)
       end
     end
 
@@ -144,13 +214,20 @@ RSpec.describe LocationsController, type: :controller do
   end
 
   describe 'DELETE	/cities/:city_id/locations/:id' do
-    it 'should redirect to city index' do
+    it 'should return http code 303' do
       required_params = {
         'city_id': city1.id,
         'id': location1.id
       }
       delete :destroy, params: required_params
       expect(response.status).to be(303)
+    end
+    it 'should redirect to city index' do
+      required_params = {
+        'city_id': city1.id,
+        'id': location1.id
+      }
+      delete :destroy, params: required_params
       expect(response).to redirect_to city_locations_path
     end
     it 'should raise nomethod error when nil id passed' do
