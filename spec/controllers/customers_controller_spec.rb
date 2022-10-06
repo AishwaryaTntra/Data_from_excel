@@ -20,8 +20,14 @@ RSpec.describe CustomersController, type: :controller do
         'location_id': location1.id
       }
       get :index, params: required_params
-      expect(response.status).to eq(200)
       expect(response).to render_template(:index)
+    end
+    it 'should respond with http success' do
+      required_params = {
+        'location_id': location1.id
+      }
+      get :index, params: required_params
+      expect(response.status).to eq(200)
     end
     it 'should raise URLGeneration error' do
       required_params = {
@@ -42,20 +48,46 @@ RSpec.describe CustomersController, type: :controller do
         'location_id': location1.id
       }
       get :edit, params: required_params
-      expect(response.status).to eq(200)
       expect(response).to render_template(:edit)
+    end
+
+    it 'should respond with http success' do
+      required_params = {
+        'id': customer1.id,
+        'location_id': location1.id
+      }
+      get :edit, params: required_params
+      expect(response.status).to eq(200)
+    end
+
+    it "should assign location variable as the customer's location" do
+      required_params = {
+        'id': customer1.id,
+        'location_id': location1.id
+      }
+      get :edit, params: required_params
       expect(assigns(:location)).to eq(location1)
+    end
+
+    it 'should assign customer variable with the customer object being editted' do
+      required_params = {
+        'id': customer1.id,
+        'location_id': location1.id
+      }
+      get :edit, params: required_params
       expect(assigns(:customer)).to eq(customer1)
     end
 
-    it 'should raise URLGeneration error when id or location_id not passed' do
+    it 'should raise URLGeneration error when location_id not passed' do
       required_params1 = {
         'location_id': location1.id
       }
+      expect { get :edit, params: required_params1 }.to raise_error(ActionController::UrlGenerationError)
+    end
+    it 'should raise URLGeneration error when id not passed' do
       required_params2 = {
         'id': customer1.id
       }
-      expect { get :edit, params: required_params1 }.to raise_error(ActionController::UrlGenerationError)
       expect { get :edit, params: required_params2 }.to raise_error(ActionController::UrlGenerationError)
     end
   end
@@ -71,12 +103,33 @@ RSpec.describe CustomersController, type: :controller do
           'location_id': location1.id
         }
         patch :update, params: required_params
-        expect(response.status).to eq(302)
         expect(response).to redirect_to location_customers_path
+      end
+      it 'should respond with http code 302' do
+        required_params = {
+          'customer': {
+            'phone': '1234876590'
+          },
+          'id': customer1.id,
+          'location_id': location1.id
+        }
+        patch :update, params: required_params
+        expect(response.status).to eq(302)
       end
     end
     context 'not updated successfully' do
-      it 'should render edit template with status unprocessable entity' do
+      it 'should render edit template' do
+        required_params = {
+          'customer': {
+            'phone': ''
+          },
+          'id': customer1.id,
+          'location_id': location1.id
+        }
+        patch :update, params: required_params
+        expect(response).to render_template(:edit)
+      end
+      it 'should respond with unprocessable entity status' do
         required_params = {
           'customer': {
             'phone': ''
@@ -86,17 +139,18 @@ RSpec.describe CustomersController, type: :controller do
         }
         patch :update, params: required_params
         expect(response.status).to eq(422)
-        expect(response).to render_template(:edit)
       end
     end
-    it 'should raise URLGeneration error when id or location id not passed' do
+    it 'should raise URLGeneration error when location_id not passed' do
       required_params1 = {
         'location_id': location1.id
       }
+      expect { patch :update, params: required_params1 }.to raise_error(ActionController::UrlGenerationError)
+    end
+    it 'should raise URLGeneration error when id not passed' do
       required_params2 = {
         'id': customer1.id
       }
-      expect { patch :update, params: required_params1 }.to raise_error(ActionController::UrlGenerationError)
       expect { patch :update, params: required_params2 }.to raise_error(ActionController::UrlGenerationError)
     end
   end
