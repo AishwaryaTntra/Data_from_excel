@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :city do
     trait :city1 do
@@ -12,4 +14,4 @@ FactoryBot.define do
       name { 'city 3' }
     end
   end
-end 
+end
