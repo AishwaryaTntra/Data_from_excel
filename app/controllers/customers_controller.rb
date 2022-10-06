@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > controllers > customers_controller
 class CustomersController < ApplicationController
   load_and_authorize_resource
   before_action :authorize

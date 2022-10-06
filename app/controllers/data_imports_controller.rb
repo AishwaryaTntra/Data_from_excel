@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > controllers > data_imports_controller
 class DataImportsController < ApplicationController
   before_action :authorize
   def new
@@ -16,10 +19,11 @@ class DataImportsController < ApplicationController
       end
     rescue NoMethodError
       redirect_to new_data_import_path, alert: 'Make sure you have uploaded the correct file with the correct data.'
+    rescue RuntimeError
+      redirect_to new_data_import_path,
+                  alert: "You have entered a file with invalid format. Please upload file with '.csv', '.xls', '.xlsx'
+                          formats only."
     end
-  rescue RuntimeError
-    redirect_to new_data_import_path,
-                alert: "You have entered a file with invalid format. Please upload file with '.csv', '.xls', '.xlsx' formats only."
   end
 
   def authorize

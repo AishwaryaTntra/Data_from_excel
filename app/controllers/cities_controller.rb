@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > controllers > cities_controller
 class CitiesController < ApplicationController
   load_and_authorize_resource
   before_action :authorize
