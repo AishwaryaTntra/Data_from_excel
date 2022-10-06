@@ -15,11 +15,16 @@ class MessagesController < ApplicationController
   def create
     @location = Location.find_by(id: params[:location_id])
     @message = @location.messages.new(message_params)
-    if @message.save
-      WhatsappMessager.new(@message).find_customers
-      redirect_to location_messages_path(@location)
+    @customers = @location.customers
+    if @customers.present?
+      if @message.save
+        WhatsappMessager.new(@message).find_customers
+        redirect_to location_messages_path(@location)
+      else
+        render :new, status: :unprocessable_entity
+      end
     else
-      render :new, status: :unprocessable_entity
+      redirect_to new_location_message_path, alert: 'No customers present for this location.'
     end
   end
 

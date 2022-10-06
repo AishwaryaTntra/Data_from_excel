@@ -14,7 +14,7 @@ RSpec.describe WhatsappMessager, type: :model do
       expect(response['message']).to eq('ok')
       expect(response['sent']).to eq('true')
     end
-    it 'should raise error when no reciever sent' do
+    it 'should raise error when is not present' do
       expect { WhatsappMessager.new(message).send_message }.to raise_error(ArgumentError)
       expect { WhatsappMessager.new.send_message(customer) }.to raise_error(ArgumentError)
     end
