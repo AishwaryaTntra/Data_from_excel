@@ -23,17 +23,4 @@ RSpec.describe User, type: :model do
       expect(admin.user?).to be false
     end
   end
-  describe '#no_duplicate_city' do
-    it 'should return nil if no cities present' do
-      expect(user.no_duplicate_city).to be nil
-    end
-    context 'user has cities' do
-      let!(:city1) { create :city, :city1, user_id: user.id }
-      let!(:city2) { create :city, :city2, user_id: user.id }
-      it 'should return uniq cities for the user' do
-        user.cities << City.first
-        expect(user.no_duplicate_city).to eq([city1, city2])
-      end
-    end
-  end
 end
