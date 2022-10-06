@@ -19,6 +19,13 @@ RSpec.describe MessagesController, type: :controller do
         }
         get :index, params: required_params
         expect(response).to redirect_to new_location_message_path
+      end
+      it 'should assign messages variable as empty array' do
+        location.messages.destroy_all
+        required_params = {
+          'location_id': location.id
+        }
+        get :index, params: required_params
         expect(assigns(:messages)).to eq([])
       end
     end
@@ -32,6 +39,12 @@ RSpec.describe MessagesController, type: :controller do
         }
         get :index, params: required_params
         expect(response).to render_template(:index)
+      end
+      it 'should respond with http success' do
+        required_params = {
+          'location_id': location.id
+        }
+        get :index, params: required_params
         expect(response.status).to eq(200)
       end
     end
@@ -45,15 +58,29 @@ RSpec.describe MessagesController, type: :controller do
         'location_id': location.id
       }
       get :new, params: required_params
-      expect(response.status).to eq(200)
       expect(response).to render_template(:new)
+    end
+    it 'should respond with http success' do
+      required_params = {
+        'id': message.id,
+        'location_id': location.id
+      }
+      get :new, params: required_params
+      expect(response.status).to eq(200)
+    end
+    it 'should assign variable message as an instance of Message' do
+      required_params = {
+        'id': message.id,
+        'location_id': location.id
+      }
+      get :new, params: required_params
       expect(assigns(:message)).to be_instance_of(Message)
     end
   end
 
   describe 'POST	/locations/:location_id/messages' do
     context 'the message is created successfully' do
-      it 'should redirect to location messages path with a created message' do
+      it 'should redirect to location messages path' do
         required_params = {
           'message': {
             'body': 'Test message 1 as invite to people.',
@@ -63,10 +90,44 @@ RSpec.describe MessagesController, type: :controller do
         }
         post :create, params: required_params
         expect(response).to redirect_to location_messages_path
+      end
+
+      it 'should respond with http code 302' do
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
         expect(response.status).to eq(302)
+      end
+
+      it "should assign the location variable with the message's location" do
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
         expect(assigns(:location)).to eq(location)
+      end
+
+      it 'should assign the message variable as an instance of Message' do
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
         expect(assigns(:message)).to be_instance_of(Message)
       end
+
     end
     context 'the message is failed to create' do
       it 'should render new with unprocessable entitiy status' do
@@ -78,8 +139,36 @@ RSpec.describe MessagesController, type: :controller do
         }
         post :create, params: required_params
         expect(response).to render_template(:new)
+      end
+      it 'should respond with unprocessable entity status' do
+        required_params = {
+          'message': {
+            'body': ''
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
         expect(response.status).to eq(422)
+      end
+      it "should assign location variable as the message's location" do
+        required_params = {
+          'message': {
+            'body': ''
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
         expect(assigns(:location)).to eq(location)
+      end
+
+      it 'should assign the message as an instance of Message' do
+        required_params = {
+          'message': {
+            'body': ''
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
         expect(assigns(:message)).to be_instance_of(Message)
       end
     end
