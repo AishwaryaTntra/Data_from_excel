@@ -14,23 +14,33 @@ RSpec.describe CitiesController, type: :controller do
     let!(:city3) { create :city, :city3, user_id: user2.id }
     it 'should return http success' do
       get :index
+      expect(response.status).to eq(200)
+    end
+    it 'should render index template' do
+      get :index
       expect(response).to render_template(:index)
+    end
+    it "assigns cities variables with user's cities" do
+      get :index
       expect(assigns(:cities)).to eq([city1, city2])
     end
   end
 
   describe 'GET	/cities/new' do
     let!(:city) { build :city, :city3, user_id: @current_user.id }
-    it 'should render new successfully' do
+    it 'should render new template' do
+      get :new
+      expect(response.status).to be(200)
+    end
+    it 'should respond with http success' do
       get :new
       expect(response).to render_template(:new)
-      expect(response.status).to be(200)
     end
   end
 
   describe 'POST /cities' do
     context 'if the city is saved' do
-      it 'should return http success' do
+      it 'should redirect to citiex index path' do
         required_params = {
           'city': {
             'name': 'TestCity',
@@ -40,16 +50,34 @@ RSpec.describe CitiesController, type: :controller do
         post :create, params: required_params
         expect(response).to redirect_to cities_path
       end
+      it 'should return http code 302' do
+        required_params = {
+          'city': {
+            'name': 'TestCity',
+            'user_id': @current_user.id
+          }
+        }
+        post :create, params: required_params
+        expect(response.status).to eq(302)
+      end
     end
     context 'if the city is not saved' do
-      it 'should render new with status unprocessable entity' do
+      it 'should render new template' do
         required_params = {
           'city': {
             'name': ''
           }
         }
         post :create, params: required_params
-        expect(response).to render_template(:new)
+        expect(response.status).to eq(422)
+      end
+      it 'should respond with unprocessable status' do
+        required_params = {
+          'city': {
+            'name': ''
+          }
+        }
+        post :create, params: required_params
         expect(response.status).to eq(422)
       end
     end
@@ -67,8 +95,14 @@ RSpec.describe CitiesController, type: :controller do
         "id": city1.id
       }
       get :edit, params: required_params
-      expect(response.status).to eq(200)
       expect(response).to render_template(:edit)
+    end
+    it 'should return http success' do
+      required_params = {
+        "id": city1.id
+      }
+      get :edit, params: required_params
+      expect(response.status).to eq(200)
     end
 
     it 'should raise URLGeneration error' do
@@ -77,7 +111,7 @@ RSpec.describe CitiesController, type: :controller do
 
     it 'should raise record not found error when wrong id passed' do
       required_params = {
-        'id': 2654918469546
+        'id': 2_654_918_469_546
       }
       expect { get :edit, params: required_params }.to raise_error(ActiveRecord::RecordNotFound)
     end
@@ -94,8 +128,27 @@ RSpec.describe CitiesController, type: :controller do
           "id": city1.id
         }
         patch :update, params: required_params
-        expect(response.status).to be(302)
         expect(response).to redirect_to cities_path
+      end
+      it 'should return with http code 302' do
+        required_params = {
+          "city": {
+            "name": 'Test user1'
+          },
+          "id": city1.id
+        }
+        patch :update, params: required_params
+        expect(response.status).to be(302)
+      end
+
+      it 'should assign city variable with the city to be updated' do
+        required_params = {
+          "city": {
+            "name": 'Test user1'
+          },
+          "id": city1.id
+        }
+        patch :update, params: required_params
         expect(assigns(:city)).to eq(city1)
       end
     end
@@ -109,8 +162,17 @@ RSpec.describe CitiesController, type: :controller do
           'id': city1.id
         }
         patch :update, params: required_params
-        expect(response.status).to be(422)
         expect(response).to render_template(:edit)
+      end
+      it 'should return with unprocessable entity status' do
+        required_params = {
+          'city': {
+            'name': ''
+          },
+          'id': city1.id
+        }
+        patch :update, params: required_params
+        expect(response.status).to be(422)
       end
     end
 
@@ -137,8 +199,14 @@ RSpec.describe CitiesController, type: :controller do
         'id': city2.id
       }
       delete :destroy, params: required_params
-      expect(response.status).to be(303)
       expect(response).to redirect_to cities_path
+    end
+    it 'should respond with http code 303 ' do
+      required_params = {
+        'id': city2.id
+      }
+      delete :destroy, params: required_params
+      expect(response.status).to be(303)
     end
     it 'should raise nomethod error when nil id passed' do
       required_params = {
