@@ -6,8 +6,6 @@ class DataImport
 
   def initialize(attributes = {})
     attributes.each { |name, value| send("#{name}=", value) }
-  rescue StandardError
-    nil
   end
 
   def persisted?
@@ -35,6 +33,8 @@ class DataImport
       location = Location.find_or_create_by(name: @location_name, city_id: city.id, user_id: current_user.id)
       customer = []
       (2..spreadsheet.sheet(num).last_row).map do |i|
+        next if spreadsheet.sheet(num).row(i).map(&:nil?).include?(true)
+
         row = Hash[[header, spreadsheet.sheet(num).row(i)].transpose]
         row['Phone'] = row['Phone'].to_s.split('.').shift
         customer_attributes = row.to_hash.transform_keys(&:downcase).merge!(location_id: location.id,

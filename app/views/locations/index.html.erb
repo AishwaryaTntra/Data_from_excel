@@ -1,26 +1,31 @@
-<h1 id = "city">Locations for <%= @locations.first.city.name %></h1>
-  <table>
-  <thead>
-      <th>Name</th>
-      <th>Edit</th>
-      <th>Delete</th>
-      <th>View users</th>
-      <th>View messages</th>
-  </thead>
-  <tbody>
-    <% @locations.each do |location| %>
-    <tr>
-      <td><%= location.name %></td>
-      <td><%= link_to "Edit", edit_city_location_path(location.city.id, location) %></td>
-      <td><%= link_to "Destroy", location_path(location), data: {
-        turbo_method: :delete,
-        turbo_confirm: "Are you sure?"
-      } %></td>
-      <td><%= link_to 'Customer list', location_customers_path(location) %></td>
-      <td><%= link_to 'Message list', location_messages_path(location) %></td>
-    </tr>
-    <% end %>
-  </tbody>
- </table><br>
+<% if @locations.count.positive? %>
+  <h1 id = "city">Locations for <%= @locations.first.city.name %></h1>
+    <table>
+    <thead>
+        <th>Name</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>View users</th>
+        <th>View messages</th>
+    </thead>
+    <tbody>
+      <% @locations.each do |location| %>
+      <tr>
+        <td><%= location.name %></td>
+        <td><%= link_to "Edit", edit_city_location_path(location.city.id, location) %></td>
+        <td><%= link_to "Destroy", location_path(location), data: {
+          turbo_method: :delete,
+          turbo_confirm: "Are you sure?"
+        } %></td>
+        <td><%= link_to 'Customer list', location_customers_path(location) %></td>
+        <td><%= link_to 'Message list', location_messages_path(location) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table><br>
 
- <button type = "button"><%= link_to "Back", cities_path %></button>
+  <button type = "button"><%= link_to "Back", cities_path %></button>
+<% else %>
+  <p> This city currently has no locations along with the customers, but you can add them <%= link_to 'here', data_imports_new_path %> <br>
+  <%= link_to 'Back', cities_path %>
+<% end %>
