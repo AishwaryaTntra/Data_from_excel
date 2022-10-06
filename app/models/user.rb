@@ -1,4 +1,6 @@
-# require activerecord - import
+# frozen_string_literal: true
+
+# app > models > user
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
