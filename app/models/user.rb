@@ -8,8 +8,7 @@ class User < ActiveRecord::Base
   has_many :locations
   has_many :customers
   belongs_to :role
-  validates :name, :phone, :email, presence: true
-  validates_uniqueness_of :name, scope: :user_id
+  validates :name, :phone, :email, presence: true, uniqueness: true
   after_initialize :set_default_role
 
   %w[admin user].each do |role|

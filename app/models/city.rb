@@ -3,8 +3,5 @@ class City < ApplicationRecord
   has_many :locations, dependent: :destroy
   has_many :customers, through: :locations
   validates :name, presence: true
-  validate :no_duplicate_location
-  def no_duplicate_location
-    self.locations = locations.uniq if locations.count.positive?
-  end
+  validates_uniqueness_of :name, scope: :user_id
 end
