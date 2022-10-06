@@ -9,23 +9,38 @@ RSpec.describe WhatsappMessager, type: :model do
   let!(:customer2) { create :customer, :customer2, location_id: location1.id, user_id: user.id }
   let!(:message) { create :message, :message1, location_id: location1.id }
   describe '#send_message' do
-    it 'should send a whatsapp message' do
-      response = JSON.parse(WhatsappMessager.new(message).send_message(customer1).body)
-      expect(response['message']).to eq('ok')
-      expect(response['sent']).to eq('true')
+    context 'it sends whastapp message' do
+      it "should have response with message 'ok'" do
+        response = JSON.parse(WhatsappMessager.new(message).send_message(customer1).body)
+        expect(response['message']).to eq('ok')
+      end
+      it 'should have response with sent value true' do
+        response = JSON.parse(WhatsappMessager.new(message).send_message(customer1).body)
+        expect(response['sent']).to eq('true')
+      end
     end
-    it 'should raise error when receiver is not present' do
+
+    it 'should raise Argument error when receiver is not present' do
       expect { WhatsappMessager.new(message).send_message }.to raise_error(ArgumentError)
-      expect { WhatsappMessager.new.send_message(customer) }.to raise_error(ArgumentError)
     end
   end
 
   describe '#find_customers' do
-    it 'should call send_message method indiviually on all the customers of a location' do
-      response = WhatsappMessager.new(message).find_customers
-      expect(response).to eq([customer1, customer2])
-      expect(response.is_a?(Array)).to be true
-      expect(response.empty?).to be false
+    context ' it calls send_message method indiviually on all the customers of a location' do
+      it 'should have response equal to array of customers of that location' do
+        response = WhatsappMessager.new(message).find_customers
+        expect(response).to eq([customer1, customer2])
+      end
+      it 'should have response which is an array' do
+        response = WhatsappMessager.new(message).find_customers
+        expect(response.is_a?(Array)).to be true
+      end
+      it 'should not return an empty response' do
+        response = WhatsappMessager.new(message).find_customers
+        expect(response.empty?).to be false
+      end
     end
   end
 end
+
+
