@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
     password { '123456' }
@@ -23,12 +25,6 @@ FactoryBot.define do
       name { 'User 4' }
       email { 'user4@gmail.com' }
       phone { '4567890123' }
-    end
-
-    trait :user5 do
-      name { 'User 5' }
-      email { 'user5@gmail.com' }
-      phone { '5678901234' }
     end
   end
 end

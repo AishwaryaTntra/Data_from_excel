@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > models > city
 class City < ApplicationRecord
   belongs_to :user
   has_many :locations, dependent: :destroy

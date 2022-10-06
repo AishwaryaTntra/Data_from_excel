@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# app > models > ability
 class Ability
   include CanCan::Ability
 

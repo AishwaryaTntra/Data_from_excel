@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > models > customer
 class Customer < ApplicationRecord
   belongs_to :location
   belongs_to :user

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > controllers > locations_controller
 class LocationsController < ApplicationController
   load_and_authorize_resource
   before_action :authorize

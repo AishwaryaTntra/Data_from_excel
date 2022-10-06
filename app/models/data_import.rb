@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > models > data_import
 class DataImport
   include ActiveModel::Model
   require 'roo'

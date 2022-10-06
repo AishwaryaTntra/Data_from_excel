@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > services > whatsapp_messager
 class WhatsappMessager
   require 'uri'
   require 'net/http'
@@ -18,7 +21,7 @@ class WhatsappMessager
     request = Net::HTTP::Post.new(url)
     request['content-type'] = 'application/x-www-form-urlencoded'
     request.body = "token=njvi4vys4y51f6w5&to=#{receiver_num}&body=#{body}!&priority=1&referenceId="
-    response = http.request(request)
+    http.request(request)
   end
 
   def find_customers

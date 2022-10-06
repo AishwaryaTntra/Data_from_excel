@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > models > location
 class Location < ApplicationRecord
   belongs_to :city
   has_many :customers, dependent: :destroy

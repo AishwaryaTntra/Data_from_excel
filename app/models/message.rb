@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app > models > message
 class Message < ApplicationRecord
   belongs_to :location
   has_many :customers, through: :location
