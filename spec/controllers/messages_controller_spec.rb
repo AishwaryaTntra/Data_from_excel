@@ -9,6 +9,8 @@ RSpec.describe MessagesController, type: :controller do
   end
   let!(:city) { create :city, :city1, user_id: user.id }
   let!(:location) { create :location, :location1, city_id: city.id, user_id: user.id }
+  let!(:customer1) { create :customer, :customer1, location_id: location.id, user_id: @current_user.id }
+  let!(:customer2) { create :customer, :customer2, location_id: location.id, user_id: @current_user.id }
   let!(:message) { create :message, :message1, location_id: location.id }
   describe 'GET	/locations/:location_id/messages' do
     context 'no messages have been created yet' do
@@ -130,7 +132,7 @@ RSpec.describe MessagesController, type: :controller do
 
     end
     context 'the message is failed to create' do
-      it 'should render new with unprocessable entitiy status' do
+      it 'should render new template' do
         required_params = {
           'message': {
             'body': ''
@@ -170,6 +172,56 @@ RSpec.describe MessagesController, type: :controller do
         }
         post :create, params: required_params
         expect(assigns(:message)).to be_instance_of(Message)
+      end
+    end
+    context 'the message is failed to create because of no existing customers in the location' do
+      it 'should redirect to new template' do
+        location.customers.destroy_all
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
+        expect(response).to redirect_to(new_location_message_path)
+      end
+      it 'should respond with http code 302' do
+        location.customers.destroy_all
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
+        expect(response.status).to eq(302)
+      end
+      it 'should assign @message variable as an instance of Message' do
+        location.customers.destroy_all
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
+        expect(assigns(:message)).to be_instance_of(Message)
+      end
+      it 'should assign @location variable as the location of the message' do
+        location.customers.destroy_all
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
+        expect(assigns(:location)).to eq(message.location)
       end
     end
   end

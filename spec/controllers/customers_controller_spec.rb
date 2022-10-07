@@ -17,12 +17,19 @@ RSpec.describe CustomersController, type: :controller do
   let!(:customer3) { create :customer, :customer3, location_id: location2.id, user_id: user.id }
 
   describe 'GET	/locations/:location_id/customers' do
-    it 'should render index with all the customers of the specific location' do
+    it 'should render index template' do
       required_params = {
         'location_id': location1.id
       }
       get :index, params: required_params
       expect(response).to render_template(:index)
+    end
+    it 'should assign customers variable with customers of the specific location' do
+      required_params = {
+        'location_id': location1.id
+      }
+      get :index, params: required_params
+      expect(assigns(:customers)).to eq(location1.customers)
     end
     it 'should respond with http success' do
       required_params = {
@@ -31,7 +38,7 @@ RSpec.describe CustomersController, type: :controller do
       get :index, params: required_params
       expect(response.status).to eq(200)
     end
-    it 'should raise URLGeneration error' do
+    it 'should raise NoMethodError' do
       required_params = {
         'location_id': ''
       }
@@ -71,7 +78,7 @@ RSpec.describe CustomersController, type: :controller do
       expect(assigns(:location)).to eq(location1)
     end
 
-    it 'should assign customer variable with the customer object being editted' do
+    it 'should assign customer variable with the customer object being edited' do
       required_params = {
         'id': customer1.id,
         'location_id': location1.id

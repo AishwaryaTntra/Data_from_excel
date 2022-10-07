@@ -30,7 +30,7 @@ RSpec.describe LocationsController, type: :controller do
       expect(response).to render_template(:index)
     end
 
-    it 'should assigns locations value to the list od locations for the city' do
+    it 'should assigns locations value to the list of locations for the city' do
       required_params = {
         'city_id': city1.id
       }
@@ -57,8 +57,8 @@ RSpec.describe LocationsController, type: :controller do
   end
 
   describe 'POST	/cities/:city_id/locations' do
-    context 'if the location is saved' do
-      it 'should return http success' do
+    context 'the location is saved' do
+      it 'should redirect to location index' do
         required_params = {
           'location': {
             'name': 'TestLocation',
@@ -69,8 +69,19 @@ RSpec.describe LocationsController, type: :controller do
         post :create, params: required_params
         expect(response).to redirect_to city_locations_path
       end
+      it 'should respond with http code 302' do
+        required_params = {
+          'location': {
+            'name': 'TestLocation',
+            'user_id': @current_user.id
+          },
+          'city_id': city1.id
+        }
+        post :create, params: required_params
+        expect(response.status).to eq(302)
+      end
     end
-    context 'if the city is not saved' do
+    context 'Location is not saved' do
       it 'should render new template ' do
         required_params = {
           'location': {
@@ -159,7 +170,7 @@ RSpec.describe LocationsController, type: :controller do
         patch :update, params: required_params
         expect(response).to redirect_to city_locations_path
       end
-      it 'should update the location' do
+      it 'should assign location variable with the location to be updated' do
         required_params = {
           "location": {
             "name": name
