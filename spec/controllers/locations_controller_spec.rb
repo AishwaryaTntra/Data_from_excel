@@ -136,10 +136,11 @@ RSpec.describe LocationsController, type: :controller do
 
   describe 'PATCH	/cities/:city_id/locations/:id' do
     context 'the location is updated' do
+      name = 'Test Location'
       it 'should return http code 302' do
         required_params = {
           "location": {
-            "name": 'Test location'
+            "name": name
           },
           "id": location1.id,
           'city_id': city1.id
@@ -150,7 +151,7 @@ RSpec.describe LocationsController, type: :controller do
       it 'should redirect to locations index' do
         required_params = {
           "location": {
-            "name": 'Test location'
+            "name": name
           },
           "id": location1.id,
           'city_id': city1.id
@@ -161,7 +162,7 @@ RSpec.describe LocationsController, type: :controller do
       it 'should update the location' do
         required_params = {
           "location": {
-            "name": 'Test location'
+            "name": name
           },
           "id": location1.id,
           'city_id': city1.id

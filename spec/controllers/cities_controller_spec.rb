@@ -120,12 +120,13 @@ RSpec.describe CitiesController, type: :controller do
   end
 
   describe 'PATCH	/cities/:id' do
-    let!(:test_city) { create :city, name: 'Test user1', user: @current_user }
+    let!(:test_city) { create :city, name: 'Test city1', user: @current_user }
     context 'the city is updated' do
+      name = 'Test city 1'
       it 'should redirect to city path with updated city' do
         required_params = {
           "city": {
-            "name": 'Test user1'
+            "name": name
           },
           "id": city1.id
         }
@@ -135,7 +136,7 @@ RSpec.describe CitiesController, type: :controller do
       it 'should return with http code 302' do
         required_params = {
           "city": {
-            "name": 'Test user1'
+            "name": name
           },
           "id": city1.id
         }
@@ -146,7 +147,7 @@ RSpec.describe CitiesController, type: :controller do
       it 'should assign city variable with the city to be updated' do
         required_params = {
           "city": {
-            "name": 'Test user1'
+            "name": name
           },
           "id": city1.id
         }
