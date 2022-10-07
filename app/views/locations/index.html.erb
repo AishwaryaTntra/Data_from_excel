@@ -1,6 +1,6 @@
 <% if @locations.count.positive? %>
   <h1 id = "city">Locations for <%= @locations.first.city.name %></h1>
-    <table>
+    <table aria-describedby = 'location index table'>
     <thead>
         <th>Name</th>
         <th>Edit</th>
