@@ -10,7 +10,7 @@ class WhatsappMessager
   end
 
   def send_message(receiver)
-    url = URI('https://api.ultramsg.com/instance19140/messages/chat')
+    url = URI('https://api.ultramsg.com/instance19524/messages/chat')
     receiver_num = "+91#{receiver.phone}"
     body = @message.body
 
@@ -20,7 +20,7 @@ class WhatsappMessager
 
     request = Net::HTTP::Post.new(url)
     request['content-type'] = 'application/x-www-form-urlencoded'
-    request.body = "token=njvi4vys4y51f6w5&to=#{receiver_num}&body=#{body}!&priority=1&referenceId="
+    request.body = "token=p2qs92alk9szu9kz&to=#{receiver_num}&body=#{body}!&priority=1&referenceId="
     http.request(request)
   end
 
