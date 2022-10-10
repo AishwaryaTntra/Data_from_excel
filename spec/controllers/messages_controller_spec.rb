@@ -79,6 +79,8 @@ RSpec.describe MessagesController, type: :controller do
   end
 
   describe 'POST	/locations/:location_id/messages' do
+    let!(:customer1) { create :customer, :customer1, location_id: location.id, user_id: @current_user.id }
+    let!(:customer2) { create :customer, :customer2, location_id: location.id, user_id: @current_user.id }
     context 'the message is created successfully' do
       it 'should redirect to location messages path' do
         required_params = {
