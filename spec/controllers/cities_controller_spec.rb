@@ -71,7 +71,7 @@ RSpec.describe CitiesController, type: :controller do
           }
         }
         post :create, params: required_params
-        expect(response.status).to eq(422)
+        expect(response).to render_template(:new)
       end
       it 'should respond with unprocessable status' do
         required_params = {
@@ -157,7 +157,7 @@ RSpec.describe CitiesController, type: :controller do
     end
 
     context 'the city is not updated' do
-      it 'should render new with unprocessable entity status' do
+      it 'should render edit template' do
         required_params = {
           'city': {
             'name': ''
