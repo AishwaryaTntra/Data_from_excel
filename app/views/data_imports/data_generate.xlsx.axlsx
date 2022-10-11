@@ -1,0 +1,10 @@
+wb = xlsx_package.workbook
+i = 1
+2.times do
+  wb.add_worksheet(name: "Location#{i}_name") do |sheet|
+    sheet.add_row %w[Name Email Phone]
+    sheet.add_row ["xyz#{i}", '12345609032', "xyz#{i}@gmail.com"]
+    sheet.add_row ["abc#{i}", '123452342', "abc#{i}@gmail.com"]
+  end
+  i += 1
+end

@@ -23,6 +23,21 @@ class DataImportsController < ApplicationController
       redirect_to new_data_import_path,
                   alert: "You have entered a file with invalid format. Please upload file with '.csv', '.xls', '.xlsx'
                           formats only."
+    rescue IndexError
+      city = City.all.where(user_id: current_user.id).last
+      city.destroy
+      redirect_to new_data_import_path, alert: 'Make sure you have uploaded the correct file with the correct data.'
+    end
+  end
+
+  def data_generate
+    @data = AxlsxService.new.create_report
+    respond_to do |format|
+      format.xlsx do
+        response.headers[
+          'Content-Disposition'
+        ] = 'attachment; filename=City_name.xlsx'
+      end
     end
   end
 
