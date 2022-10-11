@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'data_imports/new'
-  get 'data_imports/create'
+  get 'data_imports/data_generate'
+  post 'city/:id/city_customer_message', to: 'cities#city_customers_message', as: 'city_customer_message'
+  get 'city/:id/new_city_customer_message', to: 'cities#new_city_customer_message', as: 'new_city_customer_message'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # # Defines the root path route ("/")
