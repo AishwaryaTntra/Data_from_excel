@@ -21,7 +21,7 @@ class DataImportsController < ApplicationController
       redirect_to new_data_import_path, alert: 'Make sure you have uploaded the correct file with the correct data.'
     rescue RuntimeError
       redirect_to new_data_import_path,
-                  alert: "You have entered a file with invalid format. Please upload file with '.csv', '.xls', '.xlsx'
+                  alert: "You have entered a file with invalid format. Please upload file with either '.xls' or '.xlsx'
                           formats only."
     rescue IndexError
       city = City.all.where(user_id: current_user.id).last

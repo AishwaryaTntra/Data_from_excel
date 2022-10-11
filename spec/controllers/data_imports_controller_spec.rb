@@ -85,5 +85,35 @@ RSpec.describe DataImportsController, type: :controller do
         expect(response.status).to eq(302)
       end
     end
+    context 'xls format file uploaded' do
+      let!(:file) { fixture_file_upload('Vadodara.xls') }
+      it 'should redirect to cities path' do
+        required_params = {
+          'data_import': {
+            'file': file
+          }
+        }
+        post :create, params: required_params
+        expect(response).to redirect_to cities_path
+      end
+      it 'should have http code 302' do
+        required_params = {
+          'data_import': {
+            'file': file
+          }
+        }
+        post :create, params: required_params
+        expect(response.status).to eq(302)
+      end
+      it 'should assign data_import variable as an instance of DataImports' do
+        required_params = {
+          'data_import': {
+            'file': file
+          }
+        }
+        post :create, params: required_params
+        expect(assigns(:data_import)).to be_instance_of(DataImport)
+      end
+    end
   end
 end
