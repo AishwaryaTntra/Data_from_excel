@@ -21,5 +21,5 @@
     <% end %>
   </tbody>
  </table><br>
- <button type = "button"><%= link_to "Back", city_locations_path(city_id: @users.first.location.city.id) %></button>
+ <button type = "button" class = 'btn btn-primary js-scroll-trigger'><%= link_to "Back", city_locations_path(city_id: @users.first.location.city.id), :class=>'other_link' %></button>
  

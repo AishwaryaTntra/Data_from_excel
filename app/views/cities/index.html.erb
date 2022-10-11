@@ -1,4 +1,5 @@
-<h1 id = "city">Cities</h1>
+<body>
+  <h1 id = "city" >Cities</h1>
   <table aria-describedby = 'cities index table' >
   <thead>
       <th>Name</th>
@@ -6,6 +7,7 @@
       <th>Delete</th>
       <th>Locations</th>
       <th>Add location</th>
+      <th>Message Customers</th>
   </thead>
   <tbody>
     <% @cities.each do |city| %>
@@ -18,10 +20,13 @@
       } %></td>
       <td> <%= link_to 'View Locations', city_locations_path(city) %></td>
       <td> <%= link_to 'Add new location', new_city_location_path(city) %></td>
+      <td> <%= link_to "Message #{city.name} Customers", new_city_customer_message_path(city) %></td>
     </tr>
     <% end %>
   </tbody>
  </table><br>
 
- <button type = "button"><%= link_to "New City", new_city_path %></button>&nbsp;
- <button type = "button"><%= link_to "Add New Users", data_imports_new_path %></button>
+ <button type = "button" class="btn btn-primary js-scroll-trigger text-white"><%= link_to "New City", new_city_path, :class=>'other_link' %></button>&nbsp;
+ <button type = "button" class="btn btn-primary js-scroll-trigger text-white"><%= link_to "Add New Users", new_data_import_path, :class=>'other_link' %></button>
+ <button type = "button" class="btn btn-primary js-scroll-trigger text-white"><%= link_to "Back", root_path, :class=>'other_link' %></button>
+</body>

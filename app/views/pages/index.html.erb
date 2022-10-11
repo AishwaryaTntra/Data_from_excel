@@ -1,8 +1,19 @@
-
-<br><% if user_signed_in? %>
-  <%= link_to "Edit profile", edit_user_registration_path, :class => 'navbar-link' %>&nbsp;|&nbsp;
-  <%= link_to "View Cities", cities_path, :class => 'navbar-link' %>
-<% else %>
-  <h1>You need to sign in before accessing anything </h1>
-  <%= link_to "Login", new_user_session_path, :class => 'navbar-link ' %>
-<% end %>
+<header class="masthead">
+  <div class="container d-flex h-100 align-items-center">
+    <div class="mx-auto text-center">
+    <br>
+      <% if user_signed_in? %>
+         <h1>Hello <%= @current_user.name %> </h1><br>
+         <p class = 'text-white medium-font'>Finding it hard to manage all our customers ?? We are here for you. With just uploading an excel sheet you will get all your customers classified on the <br> 
+          basis of the cities and locations. You send them a whatsapp message to notifiy them about the exciting news regarding your work. </p><br>
+          <%= link_to "Edit profile", edit_user_registration_path, :class => 'btn btn-primary js-scroll-trigger' %>&nbsp;&nbsp;
+          <%= link_to "View Cities", cities_path, :class => 'btn btn-primary js-scroll-trigger' %>
+      <% else%>
+        <p class = 'text-white medium-font'>Finding it hard to manage all our customers ?? We are here for you. With just uploading an excel sheet you will get all your customers classified on the <br> 
+        basis of the cities and locations. You send them a whatsapp message to notifiy them about the exciting news regarding your work. </p>
+        <h3 class ='text-white'>You need to sign in before accessing anything </h3>
+        <%= link_to "Login", new_user_session_path, :class => 'btn btn-primary js-scroll-trigger ' %>
+      <% end %>
+    </div>
+  </div>
+</header>

@@ -23,9 +23,9 @@
       <% end %>
     </tbody>
   </table><br>
-
-  <button type = "button"><%= link_to "Back", cities_path %></button>
+  <button type = "button" class='btn btn-primary js-scroll-trigger'><%= link_to "Back", cities_path, :class => 'other_link' %></button>
+ 
 <% else %>
-  <p> This city currently has no locations along with the customers, but you can add them <%= link_to 'here', data_imports_new_path %> <br>
+  <p> This city currently has no locations along with the customers, but you can add them <%= link_to 'here', new_data_import_path %> <br>
   <%= link_to 'Back', cities_path %>
 <% end %>

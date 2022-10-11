@@ -89,4 +89,6 @@ gem 'pry'
 gem 'roo'
 gem 'uri'
 
+gem 'bootstrap-sass'
+gem 'jquery-rails'
 gem 'rubocop', '~> 1.36'

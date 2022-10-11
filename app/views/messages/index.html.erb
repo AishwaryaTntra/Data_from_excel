@@ -17,6 +17,6 @@
     <% end %>
   </tbody>
  </table><br>
- <button type = "button"><%= link_to "Back", locations_path(city_id: @messages.first.location.city.id) %></button>
+ <button type = "button" class = 'btn btn-primary js-scroll-trigger'><%= link_to "Back", city_locations_path(@messages.first.location.city), :class=>'other_link' %></button>
 
-<button type = "button"><%= link_to "Notify Users", new_location_message_path %></button>
+<button type = "button" class = 'btn btn-primary js-scroll-trigger'><%= link_to "Notify Users", new_location_message_path, :class=>'other_link' %></button>
