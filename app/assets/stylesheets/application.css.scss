@@ -1,0 +1,109 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ @import 'bootstrap-sprockets';
+ @import 'bootstrap';
+ 
+ table, th, td{
+  width: 750px;
+  border: 1px solid black;
+  padding: 10px;
+  text-align: center;
+  border-collapse: collapse;
+}
+th{
+  background-color: rgb(110,110,110);
+  color: white;
+}
+
+td{
+  background-color: rgb(199, 188, 188);
+}
+
+table a{
+  font-size: 19px;
+}
+a{
+  font-size: 15px;
+}
+.error{
+  color: red;
+}
+.navigation_bar{
+  padding-left:1350px;
+}
+.text-white{
+  color: white;
+}
+.text-light{
+  color: whitesmoke;
+}
+
+.bg-grey{
+  background-color: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+}
+
+.other_bg{
+  background-color: rgb(145, 145, 145);
+}
+
+.other_link{
+  color: white;
+}
+.bg-white{
+  background-color: rgb(245,245,245) !important;
+}
+.text-red{
+  color: red;
+}
+
+body::after {
+  content: 'Copyright &copy; Your Website 2022';
+  display: block;
+  height: 50px; /* Set same as footer's height */
+  text-align: center;
+  bottom: 0;
+  position: fixed;
+  padding-left: 600px;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background-color: rgb(104, 104, 104) !important;
+  content: 'Copyright &copy; Your Website 2022';
+}
+
+.medium-font{
+  font-size: medium;
+}
+
+.form-division{
+  align-content: center;
+  width:auto; 
+  padding-left: 670px;
+}
+
+.form_field{
+  border: rgba(255, 255, 255, 0.15);
+  background-color: rgb(182, 176, 176);
+  width: 450px;
+  height: 550px;
+  padding-left: 50px;
+  padding-top: 50px;
+}
