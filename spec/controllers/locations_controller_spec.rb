@@ -60,7 +60,7 @@ RSpec.describe LocationsController, type: :controller do
 <<<<<<< HEAD
     context 'the location is saved' do
 =======
-    context 'if the location is saved' do
+
 >>>>>>> c9e8669026e593562deb35720c70556f9871d51f
       it 'should redirect to location index' do
         required_params = {

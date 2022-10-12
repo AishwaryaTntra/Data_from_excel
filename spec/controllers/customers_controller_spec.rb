@@ -41,7 +41,7 @@ RSpec.describe CustomersController, type: :controller do
 <<<<<<< HEAD
     it 'should raise NoMethodError' do
 =======
-    it 'should raise NoMethod error' do
+
 >>>>>>> c9e8669026e593562deb35720c70556f9871d51f
       required_params = {
         'location_id': ''
