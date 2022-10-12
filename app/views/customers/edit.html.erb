@@ -1,43 +1,49 @@
-<h2>Enter the details to be updated</h2>
-<%= form_with model: [ @location, @location.customers.build ] do |form| %>
-  <div>
-    <div class = "input-container">
-      <%= form.label :name %>
-      <%= form.text_field :name  ,:size=>"50"%></div>
+<section class='form-division'>
+  <fieldset class='form_field'>
+    <h2>Enter the details to be updated</h2><br>
+    <%= form_with model: [ @location, @location.customers.build ] do |form| %>
+    <div>
+      <div class="input-container">
+        <%= form.label :name %>
+        <%= form.text_field :name  ,:size=>"35"%></div>
       <% @customer.errors.full_messages_for(:name).each do |message| %>
-      <div class = "error"><%= message %></div>
+      <div class="error"><%= message %></div>
       <% end %>
-  </div><br>
+    </div><br>
 
-  <div>
-    <div class = "input-container">
-      <%= form.label :phone %>
-      <%= form.text_field :phone ,:size=>"50" %></div>
+    <div>
+      <div class="input-container">
+        <%= form.label :phone %>
+        <%= form.text_field :phone ,:size=>"35" %></div>
       <% @customer.errors.full_messages_for(:phone).each do |message| %>
-      <div class = "error"><%= message %></div>
+      <div class="error"><%= message %></div>
       <% end %>
-  </div><br>
+    </div><br>
 
-  <div>
-    <div class = "input-container">
-      <%= form.label :email %>
-      <%= form.text_field :email ,:size=>"50" %></div>
+    <div>
+      <div class="input-container">
+        <%= form.label :email %>
+        <%= form.text_field :email ,:size=>"35" %></div>
       <% @customer.errors.full_messages_for(:email).each do |message| %>
-      <div class = "error"><%= message %></div>
+      <div class="error"><%= message %></div>
       <% end %>
-  </div><br>
-  <div>
-    <div class = "input-container">
-      <%= form.label :location_id %>
-      <%= collection_select(:user, :location_id, Location.all.where(city: @location.city.id), :id, :name, :include_blank=>'select location' )%></div>
+    </div><br>
+    <div>
+      <div class="input-container">
+        <%= form.label :location_id %>
+        <%= collection_select(:user, :location_id, Location.all.where(city: @location.city.id), :id, :name, :include_blank=>'select location' )%>
+      </div>
       <% @customer.errors.full_messages_for(:location).each do |message| %>
-      <div class = "error"><%= message %></div>
+      <div class="error"><%= message %></div>
       <% end %>
-  </div><br>
-    
-  <div>
-    <button type = "button"><%= link_to "Back", location_customers_path %></button>
-  </div>
-  
-  
-<% end %>
+    </div><br>
+
+    <div>
+      <button type="button"
+        class="btn btn-primary js-scroll-trigger"><%= link_to "Back", location_customers_path, :class=>'other_link' %></button>
+    </div>
+
+
+    <% end %>
+  </fieldset>
+</section>

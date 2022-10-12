@@ -1,16 +1,21 @@
-<%= form_with model: [ @city, @city.locations.build ] do |form| %>
-  <div>
-    <div class = "input-container">
-      <%= form.label :name %>
-      <%= form.text_field :name ,:size=>"50" %></div>
+<section class='form-division'>
+  <fieldset class='form_field'>
+    <%= form_with model: [ @city, @city.locations.build ] do |form| %>
+    <div>
+      <div class="input-container">
+        <%= form.label :name %>
+        <%= form.text_field :name ,:size=>"35" %></div>
       <% @location.errors.full_messages_for(:name).each do |message| %>
-      <div class = "error"><%= message %></div>
+      <div class="error"><%= message %></div>
       <% end %>
     </div><br>
-    
+
     <div>
       <%= form.submit %>
     </div>
-  
-    <button type = "button"><%= link_to "Back", cities_path %></button>
+
+    <button type="button"
+      class='btn btn-primary js-scroll-trigger'><%= link_to "Back", cities_path, :class => 'other_link' %></button>
     <% end %>
+  </fieldset>
+</section>

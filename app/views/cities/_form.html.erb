@@ -1,17 +1,17 @@
 <%= form_with model: @city do |form| %>
-  <div>
-  <div class = "input-container">
+<div>
+  <div class="input-container">
     <%= form.label :name %>
-    <%= form.text_field :name , size: 50 , :maxlength=>"254" %></div>
-    <% @city.errors.full_messages_for(:name).each do |message| %>
-    <div class = "error"><%= message %></div>
-    <% end %>
-  </div><br>
-  
-  <div>
-    <%= form.submit %> &nbsp; <button type = "button"><%= link_to "Back", cities_path %></button>
-  </div>
-
-  
-  
+    <%= form.text_field :name , size: 35 , :maxlength=>"254" %></div>
+  <% @city.errors.full_messages_for(:name).each do |message| %>
+  <div class="error"><%= message %></div>
   <% end %>
+</div><br>
+
+<div>
+  <button type="button" , class='btn btn-primary js-scroll-trigger other_link'><%= form.submit %></button> &nbsp;
+  <button type="button" ,
+    class='btn btn-primary js-scroll-trigger'><%= link_to "Back", cities_path, :class => 'other_link' %></button>
+</div>
+
+<% end %>

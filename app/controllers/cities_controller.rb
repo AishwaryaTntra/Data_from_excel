@@ -43,10 +43,35 @@ class CitiesController < ApplicationController
     redirect_to cities_path, status: :see_other
   end
 
+  def new_city_customer_message
+    @city = City.find_by(id: params[:id], user_id: current_user.id)
+  end
+
+  def city_customers_message
+    @city = City.find_by(id: params[:id], user_id: current_user.id)
+    @city.locations.each do |location|
+      @message = Message.new(message_params)
+      @message.assign_attributes(location_id: location.id)
+      @customers = location.customers
+      if @customers.present? && @message.save
+        WhatsappMessager.new(@message).find_customers
+      end
+    end
+    if @message.persisted?
+      redirect_to cities_path, notice: "#{@city.name} customer's have been notified!" 
+    else
+      redirect_to new_city_customer_message_path, alert: 'Something went wrong. Please try again.'
+    end
+  end
+
   private
 
   def city_params
     params.require(:city).permit(:name, :user_id)
+  end
+
+  def message_params
+    params.permit(:body, :title)
   end
 
   def authorize

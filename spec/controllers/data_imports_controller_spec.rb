@@ -61,7 +61,7 @@ RSpec.describe DataImportsController, type: :controller do
     context 'the file is not imported properly' do
       it 'should render new' do
         post :create
-        expect(response).to redirect_to data_imports_new_path
+        expect(response).to redirect_to new_data_import_path
       end
     end
     context 'incorrect file format' do
@@ -73,7 +73,7 @@ RSpec.describe DataImportsController, type: :controller do
           }
         }
         post :create, params: required_params
-        expect(response).to redirect_to data_imports_new_path
+        expect(response).to redirect_to new_data_import_path
       end
       it 'should respond with http code 302' do
         required_params = {
@@ -83,6 +83,36 @@ RSpec.describe DataImportsController, type: :controller do
         }
         post :create, params: required_params
         expect(response.status).to eq(302)
+      end
+    end
+    context 'xls format file uploaded' do
+      let!(:file) { fixture_file_upload('Vadodara.xls') }
+      it 'should redirect to cities path' do
+        required_params = {
+          'data_import': {
+            'file': file
+          }
+        }
+        post :create, params: required_params
+        expect(response).to redirect_to cities_path
+      end
+      it 'should have http code 302' do
+        required_params = {
+          'data_import': {
+            'file': file
+          }
+        }
+        post :create, params: required_params
+        expect(response.status).to eq(302)
+      end
+      it 'should assign data_import variable as an instance of DataImports' do
+        required_params = {
+          'data_import': {
+            'file': file
+          }
+        }
+        post :create, params: required_params
+        expect(assigns(:data_import)).to be_instance_of(DataImport)
       end
     end
   end

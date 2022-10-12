@@ -22,7 +22,7 @@ class MessagesController < ApplicationController
     if @customers.present?
       if @message.save
         WhatsappMessager.new(@message).find_customers
-        redirect_to location_messages_path(@location)
+        redirect_to location_messages_path(@location), notice: "#{@location.name} users have been notified."
       else
         render :new, status: :unprocessable_entity
       end

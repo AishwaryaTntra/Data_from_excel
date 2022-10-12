@@ -38,7 +38,11 @@ RSpec.describe CustomersController, type: :controller do
       get :index, params: required_params
       expect(response.status).to eq(200)
     end
+<<<<<<< HEAD
     it 'should raise NoMethodError' do
+=======
+    it 'should raise NoMethod error' do
+>>>>>>> c9e8669026e593562deb35720c70556f9871d51f
       required_params = {
         'location_id': ''
       }

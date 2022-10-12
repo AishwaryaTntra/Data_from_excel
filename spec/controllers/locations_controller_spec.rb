@@ -57,7 +57,11 @@ RSpec.describe LocationsController, type: :controller do
   end
 
   describe 'POST	/cities/:city_id/locations' do
+<<<<<<< HEAD
     context 'the location is saved' do
+=======
+    context 'if the location is saved' do
+>>>>>>> c9e8669026e593562deb35720c70556f9871d51f
       it 'should redirect to location index' do
         required_params = {
           'location': {
