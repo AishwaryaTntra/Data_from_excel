@@ -27,10 +27,9 @@ module Users
     # end
 
     # DELETE /resource
-    def destroy
-      super
-      redirect_to root_path
-    end
+    # def destroy
+    #   super
+    # end
 
     # GET /resource/cancel
     # Forces the session data which is usually expired after sign

@@ -12,7 +12,7 @@ class DataImportsController < ApplicationController
     @data_import = DataImport.new(params[:data_import])
     @current_user = current_user
     begin
-      redirect_to cities_path if @data_import.load_imported_data
+      redirect_to cities_path if @data_import.imported_data
     rescue NoMethodError, IndexError
       city = City.all.where(user_id: current_user.id).last
       city&.destroy

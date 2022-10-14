@@ -12,6 +12,7 @@ RSpec.describe CitiesController, type: :controller do
   end
   let!(:city1) { create :city, :city1, user_id: @current_user.id }
   let!(:city2) { create :city, :city2, user_id: @current_user.id }
+  let!(:city3) { create :city, :city3, user_id: user2.id }
   describe 'GET	/cities' do
     let!(:city3) { create :city, :city3, user_id: user2.id }
     it 'should return http success' do
@@ -29,7 +30,6 @@ RSpec.describe CitiesController, type: :controller do
   end
 
   describe 'GET	/cities/new' do
-    let!(:city) { build :city, :city3, user_id: @current_user.id }
     it 'should render new template' do
       get :new
       expect(response.status).to be(200)
@@ -117,6 +117,14 @@ RSpec.describe CitiesController, type: :controller do
       }
       expect { get :edit, params: required_params }.to raise_error(ActiveRecord::RecordNotFound)
     end
+
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        'id': city3.id
+      }
+      get :edit, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe 'PATCH	/cities/:id' do
@@ -194,6 +202,16 @@ RSpec.describe CitiesController, type: :controller do
       }
       expect { patch :update, params: required_params }.to raise_error(ActionController::UrlGenerationError)
     end
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        "city": {
+          "name": 'Test city 1'
+        },
+        'id': city3.id
+      }
+      patch :update, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe 'DELETE	/cities/:id' do
@@ -221,6 +239,13 @@ RSpec.describe CitiesController, type: :controller do
       required_params = {}
       expect { delete :destroy, params: required_params }.to raise_error(ActionController::UrlGenerationError)
     end
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        'id': city3.id
+      }
+      delete :destroy, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
   describe 'GET	/city/:id/new_city_customer_message' do
     it 'should return http success' do
@@ -244,9 +269,16 @@ RSpec.describe CitiesController, type: :controller do
       get :new_city_customer_message, params: required_params
       expect(assigns(:city)).to eq(city1)
     end
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        'id': city3.id
+      }
+      get :new_city_customer_message, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
 
-  describe 'POST	/city/:id/city_customer_message' do
+  describe 'POST	/city/:id/city_customers_message' do
     context 'the message is failed to create because there are no locations for the city' do
       it 'should return http success with code 302' do
         required_params = {
@@ -482,6 +514,17 @@ RSpec.describe CitiesController, type: :controller do
         post :city_customers_message, params: required_params
         expect(assigns(:customers)).to eq(city1.customers)
       end
+    end
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        'id': city3.id,
+        'message': {
+          'title': 'Test message',
+          'body': 'Test message for customers'
+        }
+      }
+      post :city_customers_message, params: required_params
+      expect(response).to redirect_to root_path
     end
   end
 end
