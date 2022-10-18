@@ -2,6 +2,7 @@
 
 # db > migrate > create_cities
 class CreateCities < ActiveRecord::Migration[7.0]
+  Rake::Task['db:migrate:ignore_concurrent'].invoke
   def change
     create_table :cities do |t|
       t.string :name
