@@ -45,22 +45,30 @@ class CitiesController < ApplicationController
 
   def new_city_customer_message
     @city = City.find_by(id: params[:id], user_id: current_user.id)
+    @message = Message.new
   end
 
   def city_customers_message
     @city = City.find_by(id: params[:id], user_id: current_user.id)
-    @city.locations.each do |location|
-      @message = Message.new(message_params)
-      @message.assign_attributes(location_id: location.id)
-      @customers = location.customers
-      if @customers.present? && @message.save
-        WhatsappMessager.new(@message).find_customers
-      end
-    end
-    if @message.persisted?
-      redirect_to cities_path, notice: "#{@city.name} customer's have been notified!" 
+    if params['message']['title'].eql?('') || params['message']['body'].eql?('')
+      redirect_to new_city_customer_message_path, alert: 'Title and body both should be present.'
     else
-      redirect_to new_city_customer_message_path, alert: 'Something went wrong. Please try again.'
+      if @city.locations.present?
+        @city.locations.each do |location|
+          @message = Message.new(message_params)
+          @message.assign_attributes(location_id: location.id)
+          @customers = location.customers
+          WhatsappMessager.new(@message).find_customers if @customers.present? && @message.save
+        end
+        if @message.persisted?
+          redirect_to cities_path, notice: "#{@city.name} customer's have been notified!"
+        else
+          redirect_to new_city_customer_message_path,
+                      alert: 'Something went wrong. Please try again. Make sure you have customers for all the locations of the city.'
+        end
+      else
+        redirect_to new_city_customer_message_path, alert: "Currently, There are no locations for #{@city.name}"
+      end
     end
   end
 
@@ -71,7 +79,7 @@ class CitiesController < ApplicationController
   end
 
   def message_params
-    params.permit(:body, :title)
+    params.require(:message).permit(:body, :title)
   end
 
   def authorize

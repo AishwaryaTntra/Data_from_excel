@@ -12,6 +12,7 @@ RSpec.describe CitiesController, type: :controller do
   end
   let!(:city1) { create :city, :city1, user_id: @current_user.id }
   let!(:city2) { create :city, :city2, user_id: @current_user.id }
+  let!(:city3) { create :city, :city3, user_id: user2.id }
   describe 'GET	/cities' do
     let!(:city3) { create :city, :city3, user_id: user2.id }
     it 'should return http success' do
@@ -29,7 +30,6 @@ RSpec.describe CitiesController, type: :controller do
   end
 
   describe 'GET	/cities/new' do
-    let!(:city) { build :city, :city3, user_id: @current_user.id }
     it 'should render new template' do
       get :new
       expect(response.status).to be(200)
@@ -117,6 +117,14 @@ RSpec.describe CitiesController, type: :controller do
       }
       expect { get :edit, params: required_params }.to raise_error(ActiveRecord::RecordNotFound)
     end
+
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        'id': city3.id
+      }
+      get :edit, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe 'PATCH	/cities/:id' do
@@ -194,6 +202,16 @@ RSpec.describe CitiesController, type: :controller do
       }
       expect { patch :update, params: required_params }.to raise_error(ActionController::UrlGenerationError)
     end
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        "city": {
+          "name": 'Test city 1'
+        },
+        'id': city3.id
+      }
+      patch :update, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe 'DELETE	/cities/:id' do
@@ -220,6 +238,293 @@ RSpec.describe CitiesController, type: :controller do
     it 'should raise URLGeneration error when no id passed' do
       required_params = {}
       expect { delete :destroy, params: required_params }.to raise_error(ActionController::UrlGenerationError)
+    end
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        'id': city3.id
+      }
+      delete :destroy, params: required_params
+      expect(response).to redirect_to root_path
+    end
+  end
+  describe 'GET	/city/:id/new_city_customer_message' do
+    it 'should return http success' do
+      required_params = {
+        'id': city1.id
+      }
+      get :new_city_customer_message, params: required_params
+      expect(response.status).to eq(200)
+    end
+    it 'should render :new_city_customer_message template' do
+      required_params = {
+        'id': city1.id
+      }
+      get :new_city_customer_message, params: required_params
+      expect(response).to render_template(:new_city_customer_message)
+    end
+    it "should assign the variable city as the city who's customers are to be messaged" do
+      required_params = {
+        'id': city1.id
+      }
+      get :new_city_customer_message, params: required_params
+      expect(assigns(:city)).to eq(city1)
+    end
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        'id': city3.id
+      }
+      get :new_city_customer_message, params: required_params
+      expect(response).to redirect_to root_path
+    end
+  end
+
+  describe 'POST	/city/:id/city_customers_message' do
+    context 'the message is failed to create because there are no locations for the city' do
+      it 'should return http success with code 302' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(response.status).to eq(302)
+      end
+      it 'should redirect to new_city_customer_message_path' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(response).to redirect_to(new_city_customer_message_path)
+      end
+      it 'should assign the city variable to be equal to the city for which the message is being created' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(assigns(:city)).to eq(city1)
+      end
+      it 'should flash an alert message regarding the absence of the locations' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(flash[:alert]).to eq('Currently, There are no locations for city 1')
+      end
+    end
+    context 'message failed to create due to customer absence' do
+      let!(:location1) { create :location, :location1, city_id: city1.id, user_id: @current_user.id }
+      let!(:location2) { create :location, :location2, city_id: city1.id, user_id: @current_user.id }
+      it 'should return http success with 302 code' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(response.status).to eq(302)
+      end
+      it 'should redirect to new_city_customer_message_path' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(response).to redirect_to(new_city_customer_message_path)
+      end
+      it "should assign the city variable as the city who's customers are being messaged" do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(assigns(:city)).to eq(city1)
+      end
+      it 'should assign the message variable as an instance of Message model' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(assigns(:message)).to be_instance_of(Message)
+      end
+      it 'should assign customers variable as an empty array' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(assigns(:customers)).to eq([])
+      end
+      it 'should flash alert message' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'test message 1',
+            'body': 'test message for city 1 users'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(flash[:alert]).to eq('Something went wrong. Please try again. Make sure you have customers for all the locations of the city.')
+      end
+    end
+    context 'message failed to create due to absence of title or body' do
+      let!(:location1) { create :location, :location1, city_id: city1.id, user_id: @current_user.id }
+      let!(:customer1) { create :customer, :customer1, location_id: location1.id, user_id: @current_user.id }
+      let!(:customer2) { create :customer, :customer2, location_id: location1.id, user_id: @current_user.id }
+      it 'should return http success with 302 code' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': '',
+            'body': 'Body for city customers message'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(response.status).to eq(302)
+      end
+      it 'should redirect to new_city_customer_message path' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': '',
+            'body': ''
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(response).to redirect_to(new_city_customer_message_path)
+      end
+      it 'should flash an alert' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': '',
+            'body': ''
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(flash[:alert]).to eq('Title and body both should be present.')
+      end
+      it "should assign city variable to city who's cutomers are being messaged" do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': '',
+            'body': ''
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(assigns(:city)).to eq(city1)
+      end
+    end
+    context 'message created successfully' do
+      let!(:location1) { create :location, :location1, city_id: city1.id, user_id: @current_user.id }
+      let!(:customer1) { create :customer, :customer1, location_id: location1.id, user_id: @current_user.id }
+      let!(:customer2) { create :customer, :customer2, location_id: location1.id, user_id: @current_user.id }
+      it 'should return http success with code 302' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'Test message',
+            'body': 'Test message for customers'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(response.status).to eq(302)
+      end
+      it 'should redirect to cities_path' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'Test message',
+            'body': 'Test message for customers'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(response).to redirect_to(cities_path)
+      end
+      it 'should flash a notice' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'Test message',
+            'body': 'Test message for customers'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(flash[:notice]).to eq("city 1 customer's have been notified!")
+      end
+      it "should assign city variable to city who's cutomers are being messaged" do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'Test message',
+            'body': 'Test message for customers'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(assigns(:city)).to eq(city1)
+      end
+      it 'should assign message variable to be an instance of Message' do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'Test message',
+            'body': 'Test message for customers'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(assigns(:message)).to be_instance_of(Message)
+      end
+      it "should assigns customers variable with the city's customers" do
+        required_params = {
+          'id': city1.id,
+          'message': {
+            'title': 'Test message',
+            'body': 'Test message for customers'
+          }
+        }
+        post :city_customers_message, params: required_params
+        expect(assigns(:customers)).to eq(city1.customers)
+      end
+    end
+    it 'should redirect to root_path if the city does not belongs to the user' do
+      required_params = {
+        'id': city3.id,
+        'message': {
+          'title': 'Test message',
+          'body': 'Test message for customers'
+        }
+      }
+      post :city_customers_message, params: required_params
+      expect(response).to redirect_to root_path
     end
   end
 end

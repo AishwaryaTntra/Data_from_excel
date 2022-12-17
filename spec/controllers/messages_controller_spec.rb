@@ -28,6 +28,14 @@ RSpec.describe MessagesController, type: :controller do
         get :index, params: required_params
         expect(assigns(:messages)).to eq([])
       end
+      it 'should flash a notice' do
+        location.messages.destroy_all
+        required_params = {
+          'location_id': location.id
+        }
+        get :index, params: required_params
+        expect(flash[:notice]).to eq('No messages sent yet!')
+      end
     end
 
     context 'there are messages for the location' do
@@ -129,7 +137,17 @@ RSpec.describe MessagesController, type: :controller do
         post :create, params: required_params
         expect(assigns(:message)).to be_instance_of(Message)
       end
-
+      it 'should flash a notice' do
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
+        expect(flash[:notice]).to eq('location 1 users have been notified.')
+      end
     end
     context 'the message is failed to create' do
       it 'should render new template' do
@@ -222,6 +240,18 @@ RSpec.describe MessagesController, type: :controller do
         }
         post :create, params: required_params
         expect(assigns(:location)).to eq(message.location)
+      end
+      it 'should flash an alert' do
+        location.customers.destroy_all
+        required_params = {
+          'message': {
+            'body': 'Test message 1 as invite to people.',
+            'title': 'Test message title'
+          },
+          'location_id': location.id
+        }
+        post :create, params: required_params
+        expect(flash[:alert]).to eq('No customers present for this location.')
       end
     end
   end

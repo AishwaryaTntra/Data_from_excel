@@ -5,16 +5,20 @@ require 'rails_helper'
 RSpec.describe CustomersController, type: :controller do
   let!(:role) { create :role, :user }
   let!(:user) { create :user, :user1, role_id: role.id }
+  let!(:user2) { create :user, :user2, role_id: role.id }
   before(:each) do
     @current_user = User.find_by(email: user.email)
     sign_in(@current_user)
   end
   let!(:city) { create :city, :city1, user_id: user.id }
+  let!(:city2) { create :city, :city2, user_id: user2.id }
   let!(:location1) { create :location, :location1, city_id: city.id, user_id: user.id }
   let!(:location2) { create :location, :location2, city_id: city.id, user_id: user.id }
+  let!(:location3) { create :location, :location1, city_id: city2.id, user_id: user2.id }
   let!(:customer1) { create :customer, :customer1, location_id: location1.id, user_id: user.id }
   let!(:customer2) { create :customer, :customer2, location_id: location1.id, user_id: user.id }
   let!(:customer3) { create :customer, :customer3, location_id: location2.id, user_id: user.id }
+  let!(:customer4) { create :customer, :customer1, location_id: location3.id, user_id: user2.id }
 
   describe 'GET	/locations/:location_id/customers' do
     it 'should render index template' do
@@ -92,6 +96,14 @@ RSpec.describe CustomersController, type: :controller do
       }
       expect { get :edit, params: required_params2 }.to raise_error(ActionController::UrlGenerationError)
     end
+    it 'should redirect to root path if the location does not belong to the current user' do
+      required_params = {
+        'id': customer4.id,
+        'location_id': location3.id
+      }
+      get :edit, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe 'PATCH	/locations/:location_id/customers/:id' do
@@ -154,6 +166,17 @@ RSpec.describe CustomersController, type: :controller do
         'id': customer1.id
       }
       expect { patch :update, params: required_params2 }.to raise_error(ActionController::UrlGenerationError)
+    end
+    it 'should redirect to root path if the location does not belong to the current user' do
+      required_params = {
+        'customer': {
+          'phone': '1234876590'
+        },
+        'id': customer4.id,
+        'location_id': location3.id
+      }
+      patch :update, params: required_params
+      expect(response).to redirect_to root_path
     end
   end
 end

@@ -35,10 +35,20 @@ class Ability
     if user.admin?
       can :manage, :all
     else
-      can :manage, City
-      can :manage, Location
-      can :manage, Message
-      can :manage, Customer
+      can :new, :all
+      can :create, :all
+      can [:read, :edit, :update, :destroy, :new_city_customer_message, :city_customers_message], City do |city|
+        city.user_id == user.id
+      end
+      can [:read, :edit, :update, :destroy], Location do |location|
+        location.user_id == user.id
+      end
+      can [:read, :edit, :update, :destroy], Message do |message|
+        message.location.user_id == user.id
+      end
+      can [:read, :edit, :update, :destroy], Customer do |customer|
+        customer.user_id == user.id
+      end
     end
   end
 end

@@ -11,8 +11,10 @@ RSpec.describe LocationsController, type: :controller do
     sign_in(@current_user)
   end
   let!(:city1) { create :city, :city1, user_id: @current_user.id }
+  let!(:city2) { create :city, :city1, user_id: user2.id }
   let!(:location1) { create :location, :location1, city_id: city1.id, user_id: @current_user.id }
   let!(:location2) { create :location, :location2, city_id: city1.id, user_id: @current_user.id }
+  let!(:location3) { create :location, :location1, city_id: city2.id, user_id: user2.id }
   describe 'GET	/cities/:city_id/locations' do
     it 'should return http success' do
       required_params = {
@@ -143,6 +145,14 @@ RSpec.describe LocationsController, type: :controller do
       }
       expect { get :edit, params: required_params }.to raise_error(ActiveRecord::RecordNotFound)
     end
+    it 'should redirect to root path if both the city and location do not belong to the user' do
+      required_params = {
+        "city_id": city2.id,
+        'id': location3.id
+      }
+      get :edit, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe 'PATCH	/cities/:city_id/locations/:id' do
@@ -225,6 +235,17 @@ RSpec.describe LocationsController, type: :controller do
       }
       expect { patch :update, params: required_params }.to raise_error(ActionController::UrlGenerationError)
     end
+    it 'should redirect to root path if both the city and location do not belong to the user' do
+      required_params = {
+        "location": {
+          "name": 'Test Location 1'
+        },
+        "city_id": city2.id,
+        'id': location3.id
+      }
+      patch :update, params: required_params
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe 'DELETE	/cities/:city_id/locations/:id' do
@@ -253,6 +274,14 @@ RSpec.describe LocationsController, type: :controller do
     it 'should raise URLGeneration error when no id passed' do
       required_params = {}
       expect { delete :destroy, params: required_params }.to raise_error(ActionController::UrlGenerationError)
+    end
+    it 'should redirect to root path if both the city and location do not belong to the user' do
+      required_params = {
+        "city_id": city2.id,
+        'id': location3.id
+      }
+      delete :destroy, params: required_params
+      expect(response).to redirect_to root_path
     end
   end
 end
