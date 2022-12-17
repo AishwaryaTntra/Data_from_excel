@@ -1,0 +1,24 @@
+<h1 class='text-white'>Welcome user!</h1>
+<p class='text-white'>Import your excel sheet here!</p>
+<p class='text-white'> Note: Make sure the excel file you enter is named as the city you are entering data
+  about.<br>For eg, if you are
+  entering the data for Surat city, then your excel file should be names as 'Surat.xlsx'. <br>Click
+  <%= link_to 'here', data_import_csvs_data_generate_path(format: :xlsx) %> to download the sample file for better
+  understanding </p>
+
+<%= form_with model: @data_import, url: data_import_csvs_path do |f| %>
+<% if @data_import.errors.any? %>
+<%= pluralize(@data_import.errors.count, "error" ) %> prevented us from
+importing your spreadsheet. Please update your spreadsheet and try agin.
+<ul>
+  <% @data_import.errors.full_messages.each do |msg| %>
+  <li>
+    <%= msg %>
+  </li>
+  <% end %>
+</ul>
+<% end %>
+<%= f.file_field :file, :required => true %> <br>
+<%= f.submit "Import File", :class => 'btn btn-primary js-scroll-trigger' %>&nbsp;&nbsp;<button type="button"
+  class='btn btn-primary js-scroll-trigger'><%= link_to "Back", cities_path, :class=>'other_link' %></button>
+<% end %>
